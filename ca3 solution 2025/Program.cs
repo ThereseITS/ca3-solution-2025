@@ -18,8 +18,9 @@ namespace ca3_solution_2025
             players =  SetUpPlayers(playerPath);
             players = AddResults(players, resultsPath);
 
-            Console.WriteLine($"{"Name",-10} {"Played",-10} {"Won",-10} {"Drawn",-10} {"Lost",-10} {"Points",-10}\n");
-           
+            PrintReport(players);
+
+
         }
         /// <summary>
         /// This method creates a list of players from a file with their names only. 
@@ -31,16 +32,25 @@ namespace ca3_solution_2025
         {
             List<Player> players = new List<Player>();
             string input;
-            using (StreamReader sr = File.OpenText(path))
+            try
             {
-                while ((input = sr.ReadLine()) != null)
+                using (StreamReader sr = File.OpenText(path))
                 {
-                    // This assumes the input line contains a name (string).
+                    while ((input = sr.ReadLine()) != null)
+                    {
+                        // This assumes the input line contains a name (string).
 
-                    Player p = new Player(input);
-                    players.Add(p);           
+                        Player p = new Player(input);
+                        players.Add(p);
+                    }
                 }
+              
             }
+            catch (FileNotFoundException ex)
+            { 
+            Console.WriteLine(ex.Message);
+            }
+            
             return players;
         }
 /// <summary>
@@ -122,6 +132,8 @@ namespace ca3_solution_2025
         {
             int biggestIndex = 0;
 
+            Console.WriteLine($"{"Name",-10} {"Played",-10} {"Won",-10} {"Drawn",-10} {"Lost",-10} {"Points",-10}\n");
+
             for (int i = 0; i < players.Count; i++)
             {
                 if (players[i].Points > players[biggestIndex].Points)
@@ -131,12 +143,13 @@ namespace ca3_solution_2025
 
                 Console.WriteLine(players[i].ToString());
             }
+          
 
             for (int i = 0; i < players.Count; i++)
             {
-                if (players[i].Points == players[biggestIndex].Points)
+                if ((players[i].Points == players[biggestIndex].Points))
                 {
-                    Console.WriteLine($"\nThe winning player is: {players[biggestIndex].Name}");
+                    Console.WriteLine($"\nThe winning player is: {players[i].Name}");
                 }
             }
 
